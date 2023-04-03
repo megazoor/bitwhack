@@ -1,24 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fugaz+One&family=Roboto:wght@100&display=swap');
 
-.container{
-  width:500px;
-  margin:0 auto;
-}
-.game-board {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  grid-gap: 1rem;
-  justify-items: center;
+.container {
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-/*  background-image: url('../assets/rocky_landscape.jpg'); */
-background-color: brown;
-  background-size: cover;
-  background-position: center;
+}
+
+.game-board {
   width: 100%;
   height: 500px;
-  padding: 1rem;
 }
 
   .mole {
@@ -41,11 +32,10 @@ background-color: brown;
     display: flex;
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.7);
-    justify-content: space-between;
+    justify-content: space-around;
     background: grey;
     color: white;
-    width: 100%;
-    margin: 0 auto;
+    font-size:24px;
   }
   
 
