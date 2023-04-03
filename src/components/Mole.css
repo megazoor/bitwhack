@@ -1,0 +1,13 @@
+.mole-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+  }
+  
+  .mole-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
