@@ -4,6 +4,9 @@ import './GameBoard.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../components/ToastStyles.css';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Stars } from '@react-three/drei';
+
 
 const CustomToastContent = ({ message }) => (
   <div>
@@ -36,7 +39,8 @@ const GameBoard = () => {
   const [moles, setMoles] = useState([]);
   const [hashPower, setHashPower] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
-
+  const [gameEnded, setGameEnded] = useState(false);
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
@@ -54,23 +58,26 @@ const GameBoard = () => {
     }, []);
   
     useEffect(() => {
-      if (timeLeft <= 0) {
-        setTimeLeft(0);
-        // End the game
-        toast(
-          <GameOverToastContent
-            message={`Hash Power: ${hashPower}`}
-            onNewGameClick={resetGame}
-          />,
-          {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: false,
-            closeOnClick: false,
-            draggable: false,
-          }
-        );
-      }
-    }, [timeLeft, hashPower]);
+        if (timeLeft <= 0 && !gameEnded) {
+          setTimeLeft(0);
+          setGameEnded(true); // Set the game status as ended
+      
+          // End the game
+          toast(
+            <GameOverToastContent
+              message={`Hash Power: ${hashPower}`}
+              onNewGameClick={resetGame}
+            />,
+            {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: false,
+              closeOnClick: false,
+              draggable: false,
+            }
+          );
+        }
+      }, [timeLeft, hashPower, gameEnded]); // Add gameEnded to the dependency array
+      
   
     useEffect(() => {
       if (timeLeft <= 0) {
@@ -135,29 +142,48 @@ const GameBoard = () => {
     };
   
     const resetGame = () => {
-      toast.dismiss();
-      setHashPower(0);
-      setTimeLeft(60);
-      setMoles((prevMoles) =>
-        prevMoles.map((mole) => ({ ...mole, active: false, whacked: false }))
-      );
-    };
-  
-    return (
-        <div class="container">
-            <div className="game-info">
-          <p>Hash Power: {hashPower}</p>
-        <p>Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</p>
+        toast.dismiss();
+        setHashPower(0);
+        setTimeLeft(60);
+        setGameEnded(false); // Reset the game status
+        setMoles((prevMoles) =>
+          prevMoles.map((mole) => ({ ...mole, active: false, whacked: false }))
+        );
+      };
+      
+  //...
+return (
+    <div className="container">
+      <div className="game-info">
+        <p>Hash Power: {hashPower}</p>
+        <p>
+          Time Left: {Math.floor(timeLeft / 60)}:
+          {(timeLeft % 60).toString().padStart(2, '0')}
+        </p>
       </div>
       <div className="game-board">
-        {moles.map((mole) => (
-          <Mole key={mole.id} mole={mole} onClick={handleMoleClick} />
-        ))}
-      <ToastContainer />
-    </div>
+<Canvas
+  camera={{ position: [0, 0, 10], fov: 50, near: 0.1, far: 1000 }}
+  style={{ width: '100vw', height: '100vh', background: 'yellow' }}
+><Stars />
+          <ambientLight />
+          <pointLight position={[10, 10, 10]} />
+          {moles.map((mole) => (
+            <Mole key={mole.id} mole={mole} onClick={handleMoleClick} />
+          ))}
+          <OrbitControls
+  enabled={!timeLeft <= 0}
+  enableZoom={false}
+  enablePan={false}
+  enableRotate={false}
+/>
 
+        </Canvas>
+        <ToastContainer />
+      </div>
     </div>
   );
-};
-
-export default GameBoard;
+  // Remove the extra closing brace here
+  }
+  
+  export default GameBoard;
