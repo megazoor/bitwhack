@@ -1,7 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Mole from './Mole';
 import './GameBoard.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './ToastStyles.css';
 
+
+// Add the CustomToastContent component here
+const CustomToastContent = ({ message }) => (
+    <div>
+      <i className="fa fa-bolt" aria-hidden="true" style={{ marginRight: '8px' }} />
+      {message}
+    </div>
+  );
+  const formatTimeLeft = (timeLeftInSeconds) => {
+    const minutes = Math.floor(timeLeftInSeconds / 60);
+    const seconds = timeLeftInSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+  
+  
 const GameBoard = () => {
   const [moles, setMoles] = useState([]);
   const [hashPower, setHashPower] = useState(0);
@@ -61,36 +79,47 @@ const GameBoard = () => {
       
 
 const handleMoleClick = (moleId, isActive) => {
-if (!isActive) return;
-const newMoles = moles.map((mole) =>
-  mole.id === moleId && mole.active
-    ? { ...mole, active: false, whacked: true }
-    : mole
-);
-setMoles(newMoles);
-setHashPower((prevHashPower) => prevHashPower + 7);
-
-// Reset the whacked mole image after 2 seconds
-setTimeout(() => {
-  setMoles((prevMoles) =>
-    prevMoles.map((mole) =>
-      mole.id === moleId && mole.whacked
-        ? { ...mole, whacked: false }
-        : mole
-    )
+  if (!isActive) return;
+  const newMoles = moles.map((mole) =>
+    mole.id === moleId && mole.active
+      ? { ...mole, active: false, whacked: true }
+      : mole
   );
-}, 2000);
+  setMoles(newMoles);
+  setHashPower((prevHashPower) => prevHashPower + 7);
+
+  // Show toast notification with custom content
+  toast.success(<CustomToastContent message="You earned +7 Hash Power!" />, {
+    position: toast.POSITION.BOTTOM_CENTER,
+    autoClose: 3000,
+    className: 'custom-toast',
+  });
+  
+  // Reset the whacked mole image after 2 seconds
+  setTimeout(() => {
+    setMoles((prevMoles) =>
+      prevMoles.map((mole) =>
+        mole.id === moleId && mole.whacked
+          ? { ...mole, whacked: false }
+          : mole
+      )
+    );
+  }, 2000);
 };
 
 return (
+<div class="container">
+<div className="game-info">
+<span>Hash Power: {hashPower}</span>
+<span>Time Left: {formatTimeLeft(timeLeft)}</span>
+</div>
 <div className="game-board">
 {moles.map((mole) => (
 <Mole key={mole.id} mole={mole} onClick={handleMoleClick} />
 ))}
-<div className="game-info">
-<p>Hash Power: {hashPower}</p>
-<p>Time Left: {timeLeft} seconds</p>
+<ToastContainer />
 </div>
+
 </div>
 );
 };
