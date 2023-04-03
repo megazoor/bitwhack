@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fugaz+One&family=Roboto:wght@100&display=swap');
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -45,3 +48,17 @@ background-color: brown;
     color: white;
   }
   
+
+  span.roboto{
+    font-family: 'Roboto', sans-serif;
+    font-size:24px;
+  }
+ 
+  span.fugaz{
+    font-family: 'Fugaz One', cursive;
+    font-size:24px;
+  }
+
+  .logo{
+    margin:20px;
+  }

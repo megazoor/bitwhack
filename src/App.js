@@ -5,7 +5,12 @@ import GameBoard from './components/GameBoard';
 function App() {
   return (
     <div className="App">
-      <h1>BitWhack</h1>
+      <div class="logo">      
+      <span class="roboto">BITWHACK</span>
+      <span>by</span>
+      <span class="fugaz">MARATHON</span>
+      </div>
+
       <GameBoard />
     </div>
   );
