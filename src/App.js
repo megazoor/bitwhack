@@ -6,9 +6,9 @@ function App() {
   return (
     <div className="App">
       <div class="logo">      
-      <span class="roboto">BITWHACK</span>
-      <span>by</span>
-      <span class="fugaz">MARATHON</span>
+        <span class="roboto">BITWHACK</span>
+        <span> by </span>
+        <span class="fugaz">MARATHON</span>
       </div>
 
       <GameBoard />

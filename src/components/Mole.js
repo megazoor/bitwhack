@@ -65,7 +65,7 @@ const Mole = ({ mole, onClick }) => {
             0,
           ]}
         >
-          <meshStandardMaterial color={moleColor} />
+          <meshPhongMaterial color={moleColor} emissive={mole.active ? 'black' : 'pink'} />
         </Box>
         {miniCubes.map((cube) => (
           <Box
@@ -77,7 +77,7 @@ const Mole = ({ mole, onClick }) => {
               0 + cube.position[2],
             ]}
           >
-            <meshStandardMaterial color={moleColor} />
+    <meshPhongMaterial color={moleColor} emissive={mole.active ? 'orange' : 'yellow'} />
           </Box>
         ))}
       </group>

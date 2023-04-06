@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../components/ToastStyles.css';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
+
 
 
 const CustomToastContent = ({ message }) => (
@@ -65,7 +67,7 @@ const GameBoard = () => {
           // End the game
           toast(
             <GameOverToastContent
-              message={`Hash Power: ${hashPower}`}
+              message={`Bitcoin ${hashPower}`}
               onNewGameClick={resetGame}
             />,
             {
@@ -121,10 +123,10 @@ const GameBoard = () => {
           : mole
       );
       setMoles(newMoles);
-      setHashPower((prevHashPower) => prevHashPower + 7);
+      setHashPower((prevHashPower) => prevHashPower + .0007);
   
       // Show toast notification with custom content
-      toast.success(<CustomToastContent message="You earned +7 Hash Power!" />, {
+      toast.success(<CustomToastContent message="You earned .0007 Satoshi!" />, {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: 2000,
       });
@@ -143,7 +145,7 @@ const GameBoard = () => {
   
     const resetGame = () => {
         toast.dismiss();
-        setHashPower(0);
+        setHashPower(.000);
         setTimeLeft(60);
         setGameEnded(false); // Reset the game status
         setMoles((prevMoles) =>
@@ -155,17 +157,24 @@ const GameBoard = () => {
 return (
     <div className="container">
       <div className="game-info">
-        <p>Hash Power: {hashPower}</p>
+        <p>Bitcoin {hashPower}</p>
         <p>
-          Time Left: {Math.floor(timeLeft / 60)}:
+          Time Until Halvening {Math.floor(timeLeft / 60)}:
           {(timeLeft % 60).toString().padStart(2, '0')}
         </p>
       </div>
       <div className="game-board">
 <Canvas
   camera={{ position: [0, 0, 10], fov: 50, near: 0.1, far: 1000 }}
-  style={{ width: '100vw', height: '100vh', background: 'yellow' }}
-><Stars />
+  style={{ width: '100vw', height: '100vh', background: 'black' }}
+>
+<EffectComposer>
+      <Bloom
+        luminanceThreshold={0.6}
+        luminanceSmoothing={0.5}
+        intensity={1.5}
+      />
+    </EffectComposer>
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
           {moles.map((mole) => (
