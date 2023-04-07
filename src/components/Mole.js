@@ -69,7 +69,7 @@ const Mole = ({ mole, onClick }) => {
           0,
         ]}
       >
-        <meshPhongMaterial wireframe color={moleColor} />
+        <meshPhongMaterial color={moleColor} />
       </Box>
       {miniCubes.map((cube) => (
   <group key={cube.id}>
