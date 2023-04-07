@@ -66,10 +66,24 @@ const GameBoard = () => {
     onClick: () => {},
   });
   const [currentBlockReward, setCurrentBlockReward] = useState(50);
+  const [halveningCounter, setHalveningCounter] = useState(0);
+
   
   useEffect(() => {
     if (timeLeft % 30 === 0 && timeLeft !== 60) {
       setCurrentBlockReward((prevBlockReward) => prevBlockReward / 2);
+      setHalveningCounter((prevHalveningCounter) => prevHalveningCounter + 1);
+
+      toast(
+        <CustomToastContent
+          message={`Halvening! Block reward decreased by 50%.`}
+          currentBlockReward={currentBlockReward / 2}
+        />,
+        {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        }
+      );
     }
   }, [timeLeft]);
 
@@ -182,11 +196,11 @@ const GameBoard = () => {
   const randomMoleId = Math.floor(Math.random() * 16);
     let randomMoleTime;
     if (round === 1) {
-      randomMoleTime = timeLeft <= 30 ? 750 : 1500;
+      randomMoleTime = timeLeft <= 30 ? 750 : 1000;
     } else if (round === 2) {
-      randomMoleTime = timeLeft <= 30 ? 500 : 1000;
+      randomMoleTime = timeLeft <= 30 ? 500 : 800;
     } else if (round === 3) {
-      randomMoleTime = timeLeft <= 30 ? 450 : 900;
+      randomMoleTime = timeLeft <= 30 ? 450 : 700;
     }
     setMoles((prevMoles) =>
       prevMoles.map((mole) =>
@@ -247,12 +261,11 @@ const handleMoleWhack = (mole) => {
   // ...
   useEffect(() => {
     if (currentStreak === 5) {
-      const btcRewardIncrement = currentBlockReward; // Scale down the reward for the game
-      setBtcReward((prevBtcReward) => prevBtcReward + btcRewardIncrement);
+      setBtcReward((prevBtcReward) => prevBtcReward + currentBlockReward);
       setCurrentStreak(0);
       toast.dismiss();
       toast(
-        <CustomToastContent message={`Block Reward! +${btcRewardIncrement.toFixed(8)} BTC.`} currentBlockReward={currentBlockReward} />,
+      <CustomToastContent message={`Block Reward! +${currentBlockReward.toFixed(8)} BTC.`} currentBlockReward={currentBlockReward} />,
         {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
@@ -274,6 +287,7 @@ const handleMoleWhack = (mole) => {
   
   
   
+  
   // ...
 
   return (
@@ -285,7 +299,7 @@ const handleMoleWhack = (mole) => {
         Time Until Halvening {Math.floor(timeLeft / 60)}:
         {(timeLeft % 60).toString().padStart(2, '0')}
       </p>
-      <p>Halvening: {round - 1}</p>
+      <p>Halvening: {halveningCounter}</p>
       <p>Current Streak: {currentStreak}</p>
     </div>
       <div className="game-board">

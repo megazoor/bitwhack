@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Box, Text, Cylinder } from '@react-three/drei';
+import { Box, Text } from '@react-three/drei';
 
 const Mole = ({ mole, onClick }) => {
   const boxRef = useRef();
@@ -15,10 +15,10 @@ const Mole = ({ mole, onClick }) => {
 
   const handleClick = () => {
     onClick(mole);
-    setShowWireframe(!showWireframe); 
+    setShowWireframe(!showWireframe);
     if (mole.active) {
       const cubes = [];
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 33; i++) {
         cubes.push({
           id: i,
           position: [
@@ -49,14 +49,21 @@ const Mole = ({ mole, onClick }) => {
       }))
     );
   });
-  const moleColor = mole.active
-  ? mole.whacked
-    ? mole.streak
-      ? mole.color
-      : 'red'
-    : mole.color
-  : 'gray';
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMiniCubes([]);
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [miniCubes]);
+
+  const moleColor = mole.active
+    ? mole.whacked
+      ? mole.streak
+        ? mole.color
+        : 'red'
+      : mole.color
+    : 'gray';
 
   return (
     <group onClick={handleClick}>
@@ -72,23 +79,18 @@ const Mole = ({ mole, onClick }) => {
         <meshPhongMaterial color={moleColor} />
       </Box>
       {miniCubes.map((cube) => (
-  <group key={cube.id}>
-    <Cylinder
-      args={[0.05, 0.05, 0.01, 32]}
-      position={[
-        (mole.id % 4) * 2 - 2.5 + cube.position[0] - 0.03, // Move right: -0.03 to -0.02
-        Math.floor(mole.id / 4) * 2 - 2.5 + cube.position[1] - 0.03, // Move up: -0.04 to -0.03
-        0 + cube.position[2] + 0.005,
-      ]}
-      rotation={[Math.PI / 2, 0, 0]}
-    >
-      {/* Gold color */}
-      <meshPhongMaterial color="#AD8929" />
-    </Cylinder>
-   
-  </group>
-))}
-
+        <Box
+          key={cube.id}
+          args={[0.05, 0.05, 0.05]}
+          position={[
+            (mole.id % 4) * 2 - 2.5 + cube.position[0],
+            Math.floor(mole.id / 4) * 2 - 2.5 + cube.position[1],
+            0 + cube.position[2],
+          ]}
+        >
+          <meshPhongMaterial color="#AD8929" />
+        </Box>
+      ))}
     </group>
   );
 };
