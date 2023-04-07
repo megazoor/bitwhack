@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-three/drei": "^9.61.4",
+    "@react-three/drei": "^9.64.0",
     "@react-three/postprocessing": "^2.7.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -40,5 +40,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^7.0.0",
+    "react-svg-loader": "^3.0.3"
   }
 }

@@ -48,3 +48,33 @@
     font-family: 'Fugaz One', cursive;
     font-size:24px;
   }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .game-info {
+    padding: 1rem;
+  }
+  
+  .game-board {
+    flex-grow: 1;
+    position: relative;
+  }
+  
+  .Toastify__toast-container {
+    bottom: 1rem !important;
+    top: auto !important;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .Toastify__toast {
+    font-size: 1.2rem;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    color: white !important;
+    border-radius: 4px !important;
+  }
